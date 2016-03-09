@@ -1,0 +1,67 @@
+$:: 
+caption: Let's you choose which field you want to edit.
+created: 20150811201945889
+editing: 
+field: text
+mklauber: 
+mklauber-editing-field: text
+modified: 20160309190406743
+tags: $:/tags/EditTemplate Trick
+title: $:/core/ui/EditTemplate/body
+
+\define lingo-base() $:/language/EditTemplate/Body/
+
+
+<$set name="editField" filter="[all[current]get[mklauber-editing-field]]" value={{!!mklauber-editing-field}} emptyValue="text">
+<$list filter="[is[current]has[_canonical_uri]]">
+
+<div class="tc-message-box">
+
+<<lingo External/Hint>>
+
+<a href={{!!_canonical_uri}}><$text text={{!!_canonical_uri}}/></a>
+
+<$edit-text field="_canonical_uri" class="tc-edit-fields"></$edit-text>
+
+</div>
+
+</$list>
+
+<$list filter="[is[current]!has[_canonical_uri]]">
+
+<$select field='mklauber-editing-field' default='text'>
+  <$list filter='[is[current]fields[]sort[]]'>
+    <option value=<<currentTiddler>>><<currentTiddler>></option>
+  </$list>
+</$select>
+
+<$reveal state="$:/state/showeditpreview" type="match" text="yes">
+
+<em class="tc-edit"><<lingo Hint>></em> <$button type="set" set="$:/state/showeditpreview" setTo="no"><<lingo Preview/Button/Hide>></$button>
+
+<div class="tc-tiddler-preview">
+<div class="tc-tiddler-preview-preview">
+<$set name="tv-tiddler-preview" value="yes">
+
+<$transclude field="text" />
+
+</$set>
+</div>
+
+<div class="tc-tiddler-preview-edit">
+<$edit-text field=<<editField>> tag="textarea" class="tc-edit-texteditor" placeholder={{$:/language/EditTemplate/Body/Placeholder}}/>
+
+</div>
+
+</div>
+
+</$reveal>
+
+<$reveal state="$:/state/showeditpreview" type="nomatch" text="yes">
+
+<em class="tc-edit"><<lingo Hint>></em> <$button type="set" set="$:/state/showeditpreview" setTo="yes"><<lingo Preview/Button/Show>></$button>
+<$edit-text field=<<editField>> tag="textarea" class="tc-edit-texteditor" placeholder={{$:/language/EditTemplate/Body/Placeholder}}/>
+
+</$reveal>
+</$list>
+</$set>
